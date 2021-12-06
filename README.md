@@ -2,7 +2,7 @@
 
 LiveData is an observable data holder class written in C++. The data inside a LiveData instance can be observed anytime for new changes. It provides a function callback when the data inside the LiveData changes.
 
-This library is similar to Android's LiveData implementation.
+This library is similar to [Android's LiveData](https://developer.android.com/topic/libraries/architecture/livedata) concept.
 
 ## Supported Data Types:
 Supported data types include `int`, `char`, `bool`, `float`, `double` and `string`.
@@ -30,7 +30,7 @@ class LdObserver : public Observer<T>
 public:
      void onChanged(T newValue)
      {
-          std::cout << "LiveData value has been updated to " << newValue;
+          std::cout << "LiveData value has been updated to: " << newValue;
      }
 };
 ```
@@ -50,9 +50,11 @@ After that, we can use setter and getter functions to set and get the value of L
 ```
 ld.setValue(newValue);
 
-T newValue = ld.getValue();
+T currentValue = ld.getValue();
 ```
 
-Here `newValue` is the updated value.
+Here `currentValue` is the updated value.
 
 Upon setting a new value to the LiveData, it provides a callback with the updated value using the `onChanged()` function call and the code inside the `onChanged()` function gets executed.
+
+An [example](examples/readme.cpp) for the above usage is also available in the [examples](examples) folder.
