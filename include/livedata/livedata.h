@@ -7,6 +7,8 @@
 #ifndef LIVEDATA_H
 #define LIVEDATA_H
 
+#include <vector>
+
 template <typename T>
 class Observer
 {
@@ -19,15 +21,16 @@ class LiveData
 {
 private:
     T mValue;
-    Observer<T> *mObserver;
+    std::vector<Observer<T> *> mObservers;
 
 public:
     void setValue(T);
     T getValue();
 
     void observe(Observer<T> *);
-    bool hasObserver();
-    void removeObserver();
+    bool hasObservers();
+    void removeObserver(Observer<T> *);
+    void removeObservers();
 
     LiveData();
     LiveData(T);
@@ -39,8 +42,9 @@ inline void LiveData<T>::setValue(T newValue)
     if (mValue != newValue)
     {
         mValue = newValue;
-        if (hasObserver())
-            mObserver->onChanged(newValue);
+        if (hasObservers())
+            for (auto observer : mObservers)
+                observer->onChanged(newValue);
     }
 }
 
@@ -48,18 +52,26 @@ template <typename T>
 inline T LiveData<T>::getValue() { return mValue; }
 
 template <typename T>
-inline void LiveData<T>::observe(Observer<T> *obs) { mObserver = obs; }
+inline void LiveData<T>::observe(Observer<T> *observer) { mObservers.push_back(observer); }
 
 template <typename T>
-inline bool LiveData<T>::hasObserver() { return (nullptr != mObserver); }
+inline bool LiveData<T>::hasObservers() { return !mObservers.empty(); }
 
 template <typename T>
-inline void LiveData<T>::removeObserver() { mObserver = nullptr; }
+inline void LiveData<T>::removeObserver(Observer<T> *observer)
+{
+    for (auto iterator = mObservers.begin(); iterator != mObservers.end(); ++iterator)
+        if (*iterator == observer)
+            mObservers.erase(iterator--);
+}
 
 template <typename T>
-inline LiveData<T>::LiveData() : mObserver(nullptr) {}
+inline void LiveData<T>::removeObservers() { mObservers.clear(); }
 
 template <typename T>
-inline LiveData<T>::LiveData(T value) : mValue(value), mObserver(nullptr){};
+inline LiveData<T>::LiveData() {}
+
+template <typename T>
+inline LiveData<T>::LiveData(T value) : mValue(value){};
 
 #endif
