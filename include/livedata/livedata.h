@@ -7,16 +7,6 @@
 #ifndef LIVEDATA_H
 #define LIVEDATA_H
 
-#define TEMPLATE(T)                                    \
-    template void Observer<T>::onChanged(T);           \
-    template void LiveData<T>::setValue(T);            \
-    template T LiveData<T>::getValue();                \
-    template void LiveData<T>::observe(Observer<T> *); \
-    template bool LiveData<T>::hasObserver();          \
-    template void LiveData<T>::removeObserver();       \
-    template LiveData<T>::LiveData();                  \
-    template LiveData<T>::LiveData(T value);
-
 template <typename T>
 class Observer
 {
@@ -40,7 +30,36 @@ public:
     void removeObserver();
 
     LiveData();
-    LiveData(T value);
+    LiveData(T);
 };
+
+template <typename T>
+inline void LiveData<T>::setValue(T newValue)
+{
+    if (mValue != newValue)
+    {
+        mValue = newValue;
+        if (hasObserver())
+            mObserver->onChanged(newValue);
+    }
+}
+
+template <typename T>
+inline T LiveData<T>::getValue() { return mValue; }
+
+template <typename T>
+inline void LiveData<T>::observe(Observer<T> *obs) { mObserver = obs; }
+
+template <typename T>
+inline bool LiveData<T>::hasObserver() { return (nullptr != mObserver); }
+
+template <typename T>
+inline void LiveData<T>::removeObserver() { mObserver = nullptr; }
+
+template <typename T>
+inline LiveData<T>::LiveData() : mObserver(nullptr) {}
+
+template <typename T>
+inline LiveData<T>::LiveData(T value) : mValue(value), mObserver(nullptr){};
 
 #endif

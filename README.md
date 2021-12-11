@@ -2,6 +2,8 @@
 
 LiveData is an observable data holder class written in C++. The data inside a LiveData instance can be observed anytime for new changes. It provides a function callback when the data inside the LiveData changes.
 
+This is a header-only library and requires only one header file to be included in the code.
+
 This library is similar to [Android's LiveData](https://developer.android.com/topic/libraries/architecture/livedata) concept.
 
 ## Supported Data Types:
