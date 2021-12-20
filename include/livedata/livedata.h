@@ -43,7 +43,7 @@ inline void LiveData<T>::setValue(T newValue)
     {
         mValue = newValue;
         if (hasObservers())
-            for (auto observer : mObservers)
+            for (auto &&observer : mObservers)
                 observer->onChanged(newValue);
     }
 }
