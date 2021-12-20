@@ -13,7 +13,7 @@ template <typename T>
 class Observer
 {
 public:
-    virtual void onChanged(T) {} // Meant to be overloaded
+    virtual void onChanged(T) = 0;
 };
 
 template <typename T>
