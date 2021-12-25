@@ -4,8 +4,8 @@
  * Created by Saad Khan on Dec 03, 2021.
 */
 
-#ifndef LIVEDATA_H
-#define LIVEDATA_H
+#ifndef LIVEDATA_HPP
+#define LIVEDATA_HPP
 
 #include <set>
 
