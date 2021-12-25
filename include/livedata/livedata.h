@@ -7,7 +7,7 @@
 #ifndef LIVEDATA_H
 #define LIVEDATA_H
 
-#include <vector>
+#include <set>
 
 template <typename T>
 class Observer
@@ -21,7 +21,7 @@ class LiveData
 {
 private:
     T mValue;
-    std::vector<Observer<T> *> mObservers;
+    std::set<Observer<T> *> mObservers;
 
 public:
     void setValue(T);
@@ -52,18 +52,13 @@ template <typename T>
 inline T LiveData<T>::getValue() { return mValue; }
 
 template <typename T>
-inline void LiveData<T>::observe(Observer<T> *observer) { mObservers.push_back(observer); }
+inline void LiveData<T>::observe(Observer<T> *observer) { mObservers.insert(observer); }
 
 template <typename T>
 inline bool LiveData<T>::hasObservers() { return !mObservers.empty(); }
 
 template <typename T>
-inline void LiveData<T>::removeObserver(Observer<T> *observer)
-{
-    for (auto iterator = mObservers.begin(); iterator != mObservers.end(); ++iterator)
-        if (*iterator == observer)
-            mObservers.erase(iterator--);
-}
+inline void LiveData<T>::removeObserver(Observer<T> *observer) { mObservers.erase(observer); }
 
 template <typename T>
 inline void LiveData<T>::removeObservers() { mObservers.clear(); }
